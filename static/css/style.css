@@ -1,0 +1,30 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.grid-sizer, .grid-item {
+    width: 30%;
+}
+
+.grid-gutter {
+    width: 2%;
+}
+
+.small-logo {
+    min-height: 100vh;
+    max-width: 100%;
+    background: url("/static/img/small-logo.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.small-logo h2 {
+    color: whitesmoke;
+    font-size: 2rem;
+}

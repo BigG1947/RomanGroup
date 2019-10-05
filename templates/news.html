@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/style.css" media="screen,projection"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.1/css/all.css"
+          integrity="sha384-wxqG4glGB3nlqX0bi23nmgwCSjWIW13BdLUEYC4VIMehfbcro/ATkyDsF/AbIOVe" crossorigin="anonymous">
+    <title>RG - Статьи о стяжке пола</title>
+    <meta name="description" content="Узнайте о стяжке пола чуть больше. Перечень статей объясняющих некоторые аспекты стяжки пола">
+    <meta name="robots" content="all">
+    {{ if .pagination.HasPrev }}<link rel="prev" href="http://romangroup.od.ua/news/page={{ .pagination.PrevPage}}" />{{end}}
+    {{ if .pagination.HasNext }}<link rel="next" href="http://romangroup.od.ua/news/page={{ .pagination.NextPage}}" />{{end}}
+</head>
+<body>
+
+<header>
+    <nav class="blue-grey lighten-1">
+        <div class="nav-wrapper container ">
+            <a href="/" class="brand-logo">RomanGroup</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li class=""><a href="/">ГЛАВНАЯ</a></li>
+                <li class="active"><a href="/news">СТАТЬИ</a></li>
+                <li><a href="/projects">ПРОЕКТЫ</a></li>
+                <li><a href="/about">О НАС</a></li>
+                <li><a href="/#contacts">КОНТАКТЫ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul class="sidenav collection with-header" id="mobile-demo">
+        <li class="collection-header"><h4 class="blue-grey-text">RomanGroup</h4></li>
+        <li class="collection-item"><a href="/" class="collection-item blue-grey-text">ГЛАВНАЯ</a></li>
+        <li class="collection-item blue-grey"><a href="/news" class="white-text">СТАТЬИ</a></li>
+        <li class="collection-item"><a href="/projects" class="collection-item blue-grey-text">ПРОЕКТЫ</a></li>
+        <li class="collection-item"><a href="/about" class="collection-item blue-grey-text">О НАС</a></li>
+        <li class="collection-item"><a href="/#contacts" class="collection-item blue-grey-text">КОНТАКТЫ</a></li>
+    </ul>
+</header>
+
+<main class="content container">
+
+    <section class="section">
+        <h4 class="center-align"><b>СТАТЬИ</b></h4>
+
+        {{ range .nl.NewsList }}
+            <div class="row z-depth-1-half" style="margin-top: 2rem; padding: 1rem">
+
+                <div class="col s12 l4">
+                    <img src="/{{ .Images }}" class="materialboxed responsive-img" alt="">
+                </div>
+                <div class="col s12 l8">
+                    <h5><b>{{ .Title }}</b></h5>
+                    <p>{{ .Description }}</p>
+                    <div class="right-align">
+                        <span><b>{{ .Date }}</b></span>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <a href="/news/{{ .Id }}" class="waves-effect blue-grey waves-light btn">открыть</a>
+                    </div>
+                </div>
+
+            </div>
+
+        {{ end }}
+
+
+    </section>
+
+    <div class="divider"></div>
+
+    {{ if .nl.NewsList }}
+        <div class="row center-align">
+            <ul class="pagination">
+                <li><a {{ if ne .pagination.CurrentPage 1}}href="/news/page=1"{{end}}
+                       style="cursor: pointer;">Первая</a>
+                </li>
+                <li class="waves-effect"><a
+                            {{if .pagination.HasPrev }}href="/news/page={{.pagination.PrevPage}}"{{ end }}
+                            style="cursor: pointer;"><i class="material-icons">chevron_left</i></a></li>
+                {{ $current := .pagination.CurrentPage}}
+                {{ range .pagination.PageList }}
+                    {{ if eq $current . }}
+
+                        <li class="blue-grey active"><a href="/news/page={{ . }}">{{ . }}</a></li>
+                    {{ else }}
+                        <li class="waves-effect"><a href="/news/page={{ . }}">{{ . }}</a></li>
+
+                    {{ end }}
+
+                {{end }}
+
+                <li class="waves-effect"><a style="cursor: pointer;"
+                                            {{ if .pagination.HasNext }}href="/news/page={{ .pagination.NextPage}}"{{end}}><i
+                                class="material-icons">chevron_right</i></a></li>
+                <li><a style="cursor: pointer;"
+                       {{ if ne .pagination.CurrentPage .pagination.TotalPage }}href="/news/page={{ .pagination.TotalPage }}"{{end}}>Последняя</a>
+                </li>
+            </ul>
+        </div>
+
+    {{ end }}
+
+
+</main>
+
+
+<footer class="page-footer blue-grey">
+    <div class="container">
+        <div class="row">
+            <div class="center-align col l4 s12">
+                <h5 class="white-text">RomanGroup</h5>
+                <p class="left-align">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad nam non officiis
+                    quaerat quas
+                    quisquam ratione recusandae reiciendis, saepe tempora temporibus unde? At ea fuga, harum nemo
+                    numquam optio?</p>
+            </div>
+            <div class="center-align col l4 s12">
+                <h5 class="white-text">Ссылки</h5>
+                <ul>
+                    <li><a class="grey-text text-lighten-3" href="/">Главная</a></li>
+                    <li><a class="grey-text text-lighten-3" href="/news">Статьи</a></li>
+                    <li><a class="grey-text text-lighten-3" href="/projects">Проекты</a></li>
+                    <li><a class="grey-text text-lighten-3" href="/about">О нас</a></li>
+                    <li><a class="grey-text text-lighten-3" href="/#contacts">Контакты</a></li>
+                </ul>
+            </div>
+
+            <div class="center-align col l4 s12">
+                <h5 class="white-text">Мы в соц. сетях</h5>
+                <div class="row" style="display: flex; justify-content: center;">
+                    <a class="grey-text text-lighten-4 col s2" href="{{ .social.Facebook }}"><i
+                                class="fab fa-facebook blue-grey" style="font-size: 2rem"></i></a>
+                    <a class="grey-text text-lighten-4 col s2" href="{{ .social.Youtube }}"><i
+                                class="fab fa-youtube blue-grey" style="font-size: 2rem"></i></a>
+                    <a class="grey-text text-lighten-4 col s2" href="{{ .social.Viber }}"><i
+                                class="fab fa-viber blue-grey" style="font-size: 2rem"></i></a>
+                    <a class="grey-text text-lighten-4 col s2" href="{{ .social.Telegram }}"><i
+                                class="fab fa-telegram blue-grey" style="font-size: 2rem"></i></a>
+                    <a class="grey-text text-lighten-4 col s2" href="/rss"><i class="fas fa-rss blue-grey"
+                                                                              style="font-size: 2rem"></i></a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container center-align">
+            © 2019 RomanGroup
+        </div>
+    </div>
+</footer>
+
+
+<!--JavaScript at end of body for optimized loading-->
+<script type="text/javascript" src="/static/js/materialize.min.js"></script>
+
+</body>
+
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems_sidenav = document.querySelectorAll('.sidenav');
+        var sidenav = M.Sidenav.init(elems_sidenav, {});
+
+        var elems_materialboxed = document.querySelectorAll('.materialboxed');
+        var materialboxed = M.Materialbox.init(elems_materialboxed, {});
+
+    });
+
+
+</script>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+        <title>Roman Odessa</title>
+        <link>https://www.roman-gropup.od.ua</link>
+        <description>Последние новости</description>
+        {{ range .nl.NewsList }}
+        <item>
+            <title>{{ .Title }}</title>
+            <link>https://www.roman-gropup.od.ua/news/{{ .Id }}</link>
+            <description>{{ .Description }}</description>
+
+            <image>
+                <url>https://www.roman-gropup.od.ua/{{ .Images }}</url>
+                <title>{{ .Title }}</title>
+                <link>https://www.roman-gropup.od.ua</link>
+            </image>
+        </item>
+        {{ end }}
+    </channel>
+</rss>
+

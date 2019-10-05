@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="/static/css/materialize.min.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/style.css" media="screen,projection"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.1/css/all.css"
+          integrity="sha384-wxqG4glGB3nlqX0bi23nmgwCSjWIW13BdLUEYC4VIMehfbcro/ATkyDsF/AbIOVe" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>RG - Админ.Панель</title>
+</head>
+<body style="min-height: 100vh;">
+
+<header>
+    <nav class="blue-grey lighten-1">
+        <div class="nav-wrapper container ">
+            <a href="/" class="brand-logo">RomanGroup</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li class=""><a href="/admin/news">СТАТЬИ</a></li>
+                <li class=""><a href="/admin/projects">ПРОЕКТЫ</a></li>
+                <li class=""><a href="/admin/social">СОЦ. СЕТИ</a></li>
+                <li><a href="/admin/secure">БЕЗОПАСНОСТЬ</a></li>
+                <li class="active"><a href="/admin/mail">СООБЩЕНИЯ</a></li>
+                <li><a href="/admin/logout"><i class="material-icons right">exit_to_app</i>ВЫХОД</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul class="sidenav collection with-header" id="mobile-demo">
+        <li class="collection-header"><h4 class="blue-grey-text">RomanGroup</h4></li>
+        <li class="collection-item"><a href="/" class="collection-item blue-grey-text">ГЛАВНАЯ</a></li>
+        <li class="collection-item"><a href="/admin/news" class="collection-item blue-grey-text">СТАТЬИ</a></li>
+        <li class="collection-item"><a href="/admin/projects" class="collection-item blue-grey-text">ПРОЕКТЫ</a></li>
+        <li class="collection-item"><a href="/admin/social" class="collection-item blue-grey-text">СОЦ. СЕТИ</a></li>
+        <li class="collection-item"><a href="/admin/secure" class="collection-item blue-grey-text">БЕЗОПАСНОСТЬ</a></li>
+        <li class="collection-item blue-grey"><a href="/admin/mail" class="white-text">СООБЩЕНИЯ</a></li>
+        <li class="collection-item"><a href="/admin/logout" class="collection-item blue-grey-text">ВЫХОД</a></li>
+    </ul>
+</header>
+
+<main class="content container">
+
+    <section class="section">
+
+
+        <h4 class="center-align" style="margin-bottom: 2rem;"><b>СООБЩЕНИЯ</b></h4>
+
+        <div class="row" style="margin-top: 1rem; margin-bottom: 1rem;">
+            <a href="/admin/mail/new"
+               class="btn card col s12 m6 {{if .checkStatus }}blue-grey-text white{{ else }} blue-grey white-text{{end}}">
+                <span class="valign-wrapper"><i class="material-icons small">message</i> - новые сообщения</span>
+            </a>
+
+            <a href="/admin/mail/old"
+               class="btn card col s12 m6 {{if .checkStatus }}blue-grey white-text{{ else }} blue-grey-text white{{end}}">
+                <span class="valign-wrapper"><i class="material-icons small">archive</i> - прочитанные ранее</span>
+            </a>
+        </div>
+
+        {{ range .fbl.FeedBackList }}
+
+            <div class="row card card-panel">
+                <a class="blue-grey-text modal-trigger" href="#message{{ .Id }}">
+                    <div class="col s12 l1 left-align">
+                        <i class="material-icons small">{{ if .IsCheck }}archive{{else}}message{{end}}</i>
+                    </div>
+                    <div class="col s12 l3 left-align"><b>от кого: </b>{{ .Name }}</div>
+                    <div class="col s12 l4 left-align"><b>тема: </b>{{ .Theme }}</div>
+                    <div class="col s12 l4 left-align"><b>время: </b>{{ .Date }}</div>
+                </a>
+
+                <div id="message{{ .Id }}" class="modal modal-fixed-footer">
+                    <div class="modal-content">
+                        <h5><b>От кого: </b>{{ .Name }}</h5>
+                        <p><b>Почта: </b>{{ .Email }}</p>
+                        <p><b>Тема: </b>{{ .Theme }}</p>
+                        <p><b>Время: </b>{{ .Date }}</p>
+                        <div class="divider"></div>
+                        <p>{{ .Text }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        {{ if .IsCheck }}
+                            <a class="btn blue-grey modal-close white-text waves-effect waves-light btn-flat">Закрыть</a>
+                        {{ else }}
+                            <a class="modal-close waves-effect waves-green btn-flat">Закрыть непрочитанным</a>
+                            <a href="/admin/mail/feedback/{{ .Id }}/check"
+                               class="btn blue-grey white-text waves-effect waves-light btn-flat">Закрыть и пометить
+                                "прочитанным"</a>{{ end }}
+
+                    </div>
+                </div>
+            </div>
+
+        {{ end }}
+
+
+    </section>
+
+
+    {{ $checkStatus := .checkStatus }}
+
+    <div class="divider"></div>
+
+    {{ if .fbl.FeedBackList }}
+        <div class="row center-align">
+            <ul class="pagination">
+                <li>
+                    <a {{ if ne .pagination.CurrentPage 1}}href="/admin/mail/{{ if $checkStatus }}old{{ else }}new{{ end }}/page=1"{{end}}
+                       style="cursor: pointer;">Первая</a>
+                </li>
+                <li class="waves-effect"><a
+                            {{if .pagination.HasPrev }}href="/admin/mail/{{ if $checkStatus }}old{{ else }}new{{ end }}/page={{.pagination.PrevPage}}"{{ end }}
+                            style="cursor: pointer;"><i class="material-icons">chevron_left</i></a></li>
+                {{ $current := .pagination.CurrentPage}}
+                {{ range .pagination.PageList }}
+                    {{ if eq $current . }}
+
+                        <li class="blue-grey active"><a
+                                    href="/admin/mail/{{ if $checkStatus }}old{{ else }}new{{ end }}/page={{ . }}">{{ . }}</a>
+                        </li>
+                    {{ else }}
+                        <li class="waves-effect"><a
+                                    href="/admin/mail/{{ if $checkStatus }}old{{ else }}new{{ end }}/page={{ . }}">{{ . }}</a>
+                        </li>
+
+                    {{ end }}
+
+                {{end }}
+
+                <li class="waves-effect"><a style="cursor: pointer;"
+                                            {{ if .pagination.HasNext }}href="/admin/mail/{{ if $checkStatus }}old{{ else }}new{{ end }}/page={{ .pagination.NextPage}}"{{end}}><i
+                                class="material-icons">chevron_right</i></a></li>
+                <li><a style="cursor: pointer;"
+                       {{ if ne .pagination.CurrentPage .pagination.TotalPage }}href="/admin/mail/{{ if $checkStatus }}old{{ else }}new{{ end }}/page={{ .pagination.TotalPage }}"{{end}}>Последняя</a>
+                </li>
+            </ul>
+        </div>
+    {{ end }}
+
+
+</main>
+
+
+<footer class="page-footer blue-grey">
+    <div class="footer-copyright">
+        <div class="container center-align">
+            © 2019 RomanGroup
+        </div>
+    </div>
+</footer>
+
+
+<!--JavaScript at end of body for optimized loading-->
+<script type="text/javascript" src="/static/js/materialize.min.js"></script>
+
+</body>
+
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems_sidenav = document.querySelectorAll('.sidenav');
+        var sidenav = M.Sidenav.init(elems_sidenav, {});
+
+        var elems_modal = document.querySelectorAll('.modal');
+        var modal = M.Modal.init(elems_modal, {});
+
+
+    });
+
+
+</script>
+</html>
